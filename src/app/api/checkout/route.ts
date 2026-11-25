@@ -18,6 +18,9 @@ export async function POST(req: Request) {
     .single()
 
   if (!product) return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+  if (Number(product.stock) <= 0) {
+    return NextResponse.json({ error: 'This item is out of stock' }, { status: 409 })
+  }
 
   // استخدام Service Role لإنشاء الطلب بأمان من السيرفر فقط
   const supabaseAdmin = createAdminClient(
@@ -51,10 +54,10 @@ export async function POST(req: Request) {
         quantity: 1,
       },
     ],
-    metadata: { orderId: order.id },
+    metadata: { orderId: order.id, productId: product.id },
     success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/store/success`,
     cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/store`,
   })
 
   return NextResponse.json({ url: session.url })
-}
+}

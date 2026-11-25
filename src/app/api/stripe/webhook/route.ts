@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
     const orderId = session.metadata?.orderId
+    const productId = session.metadata?.productId
 
     if (orderId) {
       const supabaseAdmin = createAdminClient(
@@ -40,8 +41,24 @@ export async function POST(req: Request) {
         status: 'succeeded',
         paid_at: new Date().toISOString(),
       })
+
+      // Reduce stock by one for the purchased product
+      if (productId) {
+        const { data: product } = await supabaseAdmin
+          .from('products')
+          .select('stock')
+          .eq('id', productId)
+          .single()
+
+        if (product && Number(product.stock) > 0) {
+          await supabaseAdmin
+            .from('products')
+            .update({ stock: Number(product.stock) - 1 })
+            .eq('id', productId)
+        }
+      }
     }
   }
 
   return NextResponse.json({ received: true })
-}
+}
