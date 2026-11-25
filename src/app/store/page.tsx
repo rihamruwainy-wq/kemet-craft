@@ -21,9 +21,17 @@ export default async function StorePage() {
       <header className="border-b bg-background">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <h1 className="text-xl font-bold tracking-tight">KemetCraft Store</h1>
-          <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-            Seller Dashboard
-          </Link>
+          <nav className="flex items-center gap-5 text-sm font-medium text-muted-foreground">
+            <Link href="/store/assistant" className="hover:text-foreground">
+              Ask our assistant
+            </Link>
+            <Link href="/store/chat" className="hover:text-foreground">
+              Chat with us
+            </Link>
+            <Link href="/dashboard" className="hover:text-foreground">
+              Seller Dashboard
+            </Link>
+          </nav>
         </div>
       </header>
 

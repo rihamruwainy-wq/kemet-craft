@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'This item is out of stock' }, { status: 409 })
   }
 
-  // استخدام Service Role لإنشاء الطلب بأمان من السيرفر فقط
+  // Use the service role to create the order safely, on the server only
   const supabaseAdmin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -39,6 +39,19 @@ export async function POST(req: Request) {
     .single()
 
   if (orderError || !order) {
+    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
+  }
+
+  // Record which product this order is for
+  const { error: itemError } = await supabaseAdmin.from('order_items').insert({
+    order_id: order.id,
+    product_id: product.id,
+    quantity: 1,
+    unit_price: product.price,
+  })
+
+  if (itemError) {
+    await supabaseAdmin.from('orders').delete().eq('id', order.id)
     return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
   }
 

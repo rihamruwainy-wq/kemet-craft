@@ -24,13 +24,13 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const path = request.nextUrl.pathname
 
-  // حماية مسارات الداشبورد للمسجلين فقط
+  // Dashboard routes are for signed-in users only
   if (path.startsWith('/dashboard')) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    // التحقق من الدور (Role) من جدول users
+    // Check the user's role in the users table
     const { data: profile } = await supabase
       .from('users')
       .select('role')

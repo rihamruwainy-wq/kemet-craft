@@ -21,13 +21,13 @@ export default function LoginPage() {
       <div className="w-full max-w-sm rounded-2xl border bg-white p-8 shadow-sm text-center space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight">KemetCraft</h1>
-          <p className="text-sm text-slate-500">Login to proceed</p>
+          <p className="text-sm text-slate-500">Sign in to continue</p>
         </div>
         <button
           onClick={handleGoogleLogin}
           className="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition cursor-pointer"
         >
-         continue with Google
+          Continue with Google
         </button>
       </div>
     </main>

@@ -26,10 +26,10 @@ import {
 import { ArrowUpDown } from 'lucide-react'
 
 const columns: ColumnDef<Product>[] = [
-  { accessorKey: 'title', header: 'المنتج' },
+  { accessorKey: 'title', header: 'Product' },
   {
     accessorKey: 'era_tag',
-    header: 'التصنيف',
+    header: 'Category',
     cell: ({ row }) => (
       <Badge variant="outline">{row.getValue('era_tag') || 'General'}</Badge>
     ),
@@ -41,19 +41,19 @@ const columns: ColumnDef<Product>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        السعر <ArrowUpDown className="ml-2 h-4 w-4" />
+        Price <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ row }) => `$${Number(row.getValue('price')).toFixed(2)}`,
   },
   {
     accessorKey: 'stock',
-    header: 'المخزون',
+    header: 'Stock',
     cell: ({ row }) => {
       const stock = Number(row.getValue('stock'))
       return (
         <span className={stock === 0 ? 'text-red-600 font-medium' : ''}>
-          {stock} قطعة
+          {stock} in stock
         </span>
       )
     },
@@ -79,7 +79,7 @@ export function ProductsTable({ data }: { data: Product[] }) {
   return (
     <div className="space-y-4">
       <Input
-        placeholder="ابحثي باسم المنتج أو التصنيف..."
+        placeholder="Search by product name or category..."
         value={globalFilter}
         onChange={(e) => setGlobalFilter(e.target.value)}
         className="max-w-sm bg-white"
@@ -112,7 +112,7 @@ export function ProductsTable({ data }: { data: Product[] }) {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center text-slate-500">
-                  لا توجد منتجات بعد — أضيفي أول منتج من الزر بالأعلى!
+                  No products yet. Add your first product with the button above.
                 </TableCell>
               </TableRow>
             )}
@@ -127,7 +127,7 @@ export function ProductsTable({ data }: { data: Product[] }) {
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          السابق
+          Previous
         </Button>
         <Button
           variant="outline"
@@ -135,7 +135,7 @@ export function ProductsTable({ data }: { data: Product[] }) {
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          التالي
+          Next
         </Button>
       </div>
     </div>

@@ -54,33 +54,33 @@ export function AddProductDialog() {
 </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>إضافة منتج تراثي جديد</DialogTitle>
+          <DialogTitle>Add a new heritage product</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="title">اسم المنتج</Label>
-            <Input id="title" name="title" placeholder="مثال: تمثال باستت نحاسي" required />
+            <Label htmlFor="title">Product name</Label>
+            <Input id="title" name="title" placeholder="e.g. Bronze Bastet statue" required />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="price">السعر ($)</Label>
+              <Label htmlFor="price">Price ($)</Label>
               <Input id="price" name="price" type="number" step="0.01" required />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="stock">الكمية المتاحة</Label>
+              <Label htmlFor="stock">Stock</Label>
               <Input id="stock" name="stock" type="number" required />
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="era_tag">العصر / التصنيف</Label>
+            <Label htmlFor="era_tag">Era / category</Label>
             <Input id="era_tag" name="era_tag" placeholder="Pharaonic / Islamic / Coptic" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="description">الوصف والقصة التاريخية (يُستخدم في الـ RAG)</Label>
-            <Input id="description" name="description" placeholder="وصف مختصر للقطعة وخامتها..." />
+            <Label htmlFor="description">Description and history (used by the AI assistant)</Label>
+            <Input id="description" name="description" placeholder="Short description of the piece and its materials..." />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'جاري الحفظ...' : 'حفظ المنتج'}
+            {loading ? 'Saving...' : 'Save product'}
           </Button>
         </form>
       </DialogContent>

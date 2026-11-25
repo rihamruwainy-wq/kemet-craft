@@ -15,6 +15,7 @@ type Order = {
   total_amount: number | string
   status: string
   created_at?: string | null
+  order_items?: { quantity: number; unit_price: number | string; products: { title: string } | null }[]
 }
 
 const statusVariant = (status: string) =>
@@ -22,7 +23,7 @@ const statusVariant = (status: string) =>
 
 export default async function OrdersPage() {
   const supabase = await createClient()
-  const { data } = await supabase.from('orders').select('*')
+  const { data } = await supabase.from('orders').select('*, order_items(quantity, unit_price, products(title))')
   const orders = ((data ?? []) as Order[]).sort((a, b) =>
     String(b.created_at ?? '').localeCompare(String(a.created_at ?? ''))
   )
@@ -39,6 +40,7 @@ export default async function OrdersPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Order</TableHead>
+              <TableHead>Product</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Total</TableHead>
@@ -49,6 +51,13 @@ export default async function OrdersPage() {
               orders.map((o) => (
                 <TableRow key={o.id}>
                   <TableCell className="font-mono text-xs">{o.id.slice(0, 8)}</TableCell>
+                  <TableCell>
+                    {o.order_items?.length
+                      ? o.order_items
+                          .map((i) => `${i.products?.title ?? 'Deleted product'}${i.quantity > 1 ? ` × ${i.quantity}` : ''}`)
+                          .join(', ')
+                      : '—'}
+                  </TableCell>
                   <TableCell>
                     {o.created_at ? new Date(o.created_at).toLocaleDateString('en-GB') : '—'}
                   </TableCell>
@@ -64,7 +73,7 @@ export default async function OrdersPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center text-slate-500">
+                <TableCell colSpan={5} className="h-24 text-center text-slate-500">
                   No orders yet.
                 </TableCell>
               </TableRow>
