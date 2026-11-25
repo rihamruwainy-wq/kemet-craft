@@ -23,7 +23,7 @@ export async function askAssistant(supabase: SupabaseClient, question: string): 
   const era = ERAS.find((e) => lower.includes(e))
 
   // Intent: stock questions (useful for sellers)
-  if (/\b(low stock|out of stock|restock|running low|sold out|inventory)\b/.test(lower)) {
+  if (/\b(stock|inventory|restock|sold out|running low|running out)\b/.test(lower) && !/\bin stock\b.*\b(under|below|gift)\b/.test(lower)) {
     const { data } = await supabase.from('products').select('*').lte('stock', 3).order('stock')
     const items = (data ?? []) as Product[]
     return {
